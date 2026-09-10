@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Spam Email Classifier</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f4f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: white;
+            width: 500px;
+            padding: 35px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        .description {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 12px;
+            margin-top: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+            resize: none;
+            box-sizing: border-box;
+        }
+
+        .button-container {
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        .check-button {
+            background: #007bff;
+        }
+
+        .check-button:hover {
+            background: #0056b3;
+        }
+
+        .clear-button {
+            background: #6c757d;
+        }
+
+        .clear-button:hover {
+            background: #545b62;
+        }
+
+        .result {
+            margin-top: 25px;
+            padding: 15px;
+            border-radius: 8px;
+            background: #f1f1f1;
+        }
+
+        .result h2 {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>📧 Spam Email Classifier</h1>
+
+        <p class="description">
+            Enter a message and let the AI predict whether it is Spam or Ham.
+        </p>
+
+        <form action="/predict" method="POST">
+
+            <textarea
+                name="message"
+                placeholder="Type your message here..."
+                required
+            >{{ message if message else "" }}</textarea>
+
+            <div class="button-container">
+
+                <button
+                    type="submit"
+                    class="check-button">
+                    🔍 Check Message
+                </button>
+
+                <button
+                    type="button"
+                    class="clear-button"
+                    onclick="clearMessage()">
+                    🗑️ Clear
+                </button>
+
+            </div>
+
+        </form>
+        {% if error %}
+    <div class="result">
+        <h2>⚠️ Message Required</h2>
+        <p>{{ error }}</p>
+    </div>
+{% endif %}
+
+        {% if prediction == "spam" %}
+
+            <div class="result">
+                <h2>🔴 SPAM MESSAGE</h2>
+                <p>⚠️ Be careful! This message may be spam.</p>
+                <p>Confidence: {{ confidence }}%</p>
+            </div>
+
+        {% elif prediction == "ham" %}
+
+            <div class="result">
+                <h2>🟢 SAFE MESSAGE</h2>
+                <p>✅ This message appears to be safe.</p>
+                <p>Confidence: {{ confidence }}%</p>
+            </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <script>
+        function clearMessage() {
+            document.querySelector('textarea[name="message"]').value = "";
+        }
+    </script>
+
+</body>
+</html>
